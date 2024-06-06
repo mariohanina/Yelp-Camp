@@ -10,11 +10,33 @@
         <!-- Show a specific campground in a card -->
         <div class="card mb-3">
 
-            <!-- Campground image -->
-            <img src="<%= campground.image%>" class="card-img-top" alt="...">
+
+            <!-- Carousel for displaying images -->
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    <% campground.images.forEach((img, i) => {  %>
+                    <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+                        <img src="<%= img.url%>" class="d-block w-100" alt="">
+                    </div>
+                    <% }) %>
+                </div>
+
+                <% if(campground.images.length > 1) {%>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                <% } %>
+            </div>
+
 
             <!-- Card body -->
-
             <!-- Title -->
             <div class="card-body">
                 <h5 class="card-title"><%= campground.title%></h5>

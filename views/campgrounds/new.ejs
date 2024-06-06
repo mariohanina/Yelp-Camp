@@ -8,8 +8,6 @@
         <!-- Display the form for creating a new campground -->
         <form action="/campgrounds" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
 
-            <input type="file" name="image" multiple>
-
             <!-- Title -->
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
@@ -23,12 +21,6 @@
             <div class="mb-3">
                 <label class="form-label" for="location">Location</label>
                 <input class="form-control" type="text" id="location" name="campground[location]" required>
-            </div>
-
-            <!-- Image Url -->
-            <div class="mb-3">
-                <label class="form-label" for="image">Image Url</label>
-                <input class="form-control" type="text" id="image" name="campground[image]" required>
             </div>
 
             <!-- Campground price -->
@@ -47,6 +39,13 @@
                 <textarea class="form-control" type="text" id="description" name="campground[description]"
                     required></textarea>
             </div>
+
+            <!-- Images -->
+            <div class="mb-3">
+                <label for="image" class="form-label">Campground images</label>
+                <input class="form-control" type="file" id="image" name="image" multiple>
+            </div>
+
 
             <!-- Submit Button -->
             <div class="mb-3">

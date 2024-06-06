@@ -12,19 +12,17 @@ const { isLoggedIn, validateCampground, isAuthor } = require("../middleware");
 const cathcAsync = require("../utils/catchAsync");
 
 // Multer: for uploading files
-const multer = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const multer = require('multer');
+// no need to add "/index" to the "../cloudinary" path because node looks for that by default
+const { storage } = require("../cloudinary");
+const upload = multer({ storage });
 
 
 // ----------------- ROUTES -----------------
 // SHOW all campgrounds -- CREATE new campground
 router.route("/")
     .get(cathcAsync(campgroundsController.index))
-    // .post(isLoggedIn, validateCampground, cathcAsync(campgroundsController.createCampground))
-    .post(upload.array('image'), (req, res) => {
-        console.log(req.body, req.files);
-        res.send("It worked!");
-    })
+    .post(isLoggedIn, upload.array('image'), validateCampground, cathcAsync(campgroundsController.createCampground))
 
 // Display form for creating new campground
 router.get("/new", isLoggedIn, campgroundsController.renderNewForm);
@@ -32,7 +30,7 @@ router.get("/new", isLoggedIn, campgroundsController.renderNewForm);
 // SHOW single campground -- UPDATE single campground -- DELETE single campground
 router.route("/:id")
     .get(cathcAsync(campgroundsController.showCampground))
-    .put(isLoggedIn, isAuthor, validateCampground, cathcAsync(campgroundsController.updateCampground))
+    .put(isLoggedIn, upload.array('image'), isAuthor, validateCampground, cathcAsync(campgroundsController.updateCampground))
     .delete(isLoggedIn, isAuthor, cathcAsync(campgroundsController.deleteCampground));
 
 // Display form for updating campground
