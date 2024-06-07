@@ -1,5 +1,6 @@
 // Require the mongoose campgrounds model
 const Campground = require("../models/campground");
+const { cloudinary } = require("../cloudinary/index");
 
 // SHOW all campgrounds
 module.exports.index = async (req, res) => {
@@ -69,6 +70,18 @@ module.exports.updateCampground = async (req, res) => {
     const imgs = req.files.map(file => ({ url: file.path, filename: file.filename }))
     campground.images.push(...imgs);
     await campground.save();
+
+    // Delete images from campground
+    if (req.body.deleteImages) {
+
+        for (const image of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(image);
+        }
+
+        await campground.updateOne({
+            $pull: { images: { filename: { $in: req.body.deleteImages } } }
+        })
+    }
 
     req.flash("success", "Successfully updated campground");
     res.redirect(`/campgrounds/${id}`)

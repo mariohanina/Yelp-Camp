@@ -8,7 +8,9 @@ module.exports.campgroundSchema = Joi.object({
         price: Joi.number().required().min(0),
         description: Joi.string().required(),
         location: Joi.string().required()
-    }).required()
+    }).required(),
+
+    deleteImages: Joi.array()
 })
 
 // Export the function that validates the data for reviews

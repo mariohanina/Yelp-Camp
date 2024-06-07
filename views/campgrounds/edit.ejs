@@ -23,12 +23,6 @@
                     value="<%=campground.location %>" required>
             </div>
 
-            <!-- Image Url -->
-            <div class="mb-3">
-                <label class="form-label" for="image">Upload images</label>
-                <input type="file" name="image" id="image" multiple>
-            </div>
-
             <!-- Campground Price -->
             <div class="mb-3">
                 <label class="form-label" for="price">Campground Price</label>
@@ -45,6 +39,29 @@
                 <textarea class="form-control" type="text" id="description" name="campground[description]"
                     required><%= campground.description%></textarea>
             </div>
+
+            <!-- Image Url -->
+            <div class="mb-3">
+                <label class="form-label" for="image">Upload images</label>
+                <input type="file" name="image" id="image" multiple>
+            </div>
+
+            <div class="mb-3">
+                <% campground.images.forEach((image, index) => { %>
+                <img src="<%= image.url %>" alt="" class="img-thumbnail">
+
+                <div>
+                    <div class="form-check-inline">
+                        <input type="checkbox" id="image-<%= index %>" name="deleteImages[]"
+                            value="<%= image.filename %>">
+                    </div>
+                    <label for="image-<%= index %>">Delete</label>
+                </div>
+
+                <% }); %>
+            </div>
+
+
 
             <!-- Submit Button -->
             <div class="mb-3">
