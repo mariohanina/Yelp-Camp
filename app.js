@@ -1,31 +1,23 @@
 // If app is not deployed yet, require dotenv
 if (process.env.NODE_ENV !== "production") require("dotenv").config();
-
 // Express
 const express = require("express");
-
 // Routing
 const userRoutes = require("./routes/users");
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
-
 // Templating
 const path = require("path");
 const ejsMate = require("ejs-mate");
-
 // Database related
 const mongoose = require("mongoose");
-
 // Models
 const User = require("./models/user");
-
 // Authentication
 const passport = require("passport");
 const localStrategy = require("passport-local");
-
 // Error Handling
 const ExpressError = require("./utils/expressError");
-
 // Other
 const methodOverride = require("method-override");
 const session = require("express-session");

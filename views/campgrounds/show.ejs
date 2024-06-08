@@ -1,11 +1,35 @@
 <% layout("layouts/boilerplate") %>
 
+<!-- STARS CSS -->
 <link rel="stylesheet" href="/stylesheets/stars.css">
+
+<!-- MAPBOX CSS -->
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #map {
+        /* position: absolute; */
+        /* top: 0; */
+        /* bottom: 0; */
+        width: 400px;
+        height: 300px;
+    }
+</style>
+
+
 
 <div class="row">
 
     <!-- Campground -->
     <div class="col-6">
+
+        <div id="map"></div>
+
 
         <!-- Show a specific campground in a card -->
         <div class="card mb-3">
@@ -158,3 +182,9 @@
 
     </div>
 </div>
+
+<script>
+    const mapToken = "<%= process.env.MAPBOX_TOKEN %>"
+    const coordinates = `<%- campground.geometry.coordinates %>`.split(",");
+</script>
+<script src="/javascripts/showPageMap.js"></script>
