@@ -1,5 +1,23 @@
 <% layout("layouts/boilerplate") %>
 
+
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+
+<div id="map" style="width: 100%; height: 500px;"></div>
+
+
+
+
+
+
+
+
+
+
+
+
 <h1>All Campgrounds</h1>
 
 <!-- Link to add new campgrounds -->
@@ -43,3 +61,11 @@
 
     <% } %>
 </ul>
+
+<script>
+    const mapToken = "<%= process.env.MAPBOX_TOKEN %>"
+    const campgrounds = { features: JSON.parse(`<%- JSON.stringify(campgrounds) %>`) }
+    console.log(campgrounds);
+</script>
+
+<script src="/javascripts/clusterMap.js"></script>
