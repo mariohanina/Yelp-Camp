@@ -9,9 +9,14 @@ const imageSchema = new Schema({
     filename: String
 })
 
+
 imageSchema.virtual("thumbnail").get(function () {
     return this.url.replace("/upload", "/upload/w_200")
 });
+
+
+const opts = { toJSON: { virtuals: true } };
+
 
 // Campgrounds schema
 const CampgroundSchema = new Schema({
@@ -41,7 +46,11 @@ const CampgroundSchema = new Schema({
             ref: "Review"
         }
     ]
-})
+}, opts)
+
+CampgroundSchema.virtual("properties.popUpMarkup").get(function () {
+    return `<a href=/campgrounds/${this._id}>${this.title}</a><p>${this.description.substring(0, 30)}...</p>`
+});
 
 // Every time the "findOneAndDelete" method is called on Campground model, we delete all reviews associated with that campground.
 CampgroundSchema.post("findOneAndDelete", async (doc) => {
