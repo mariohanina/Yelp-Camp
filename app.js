@@ -22,6 +22,8 @@ const ExpressError = require("./utils/expressError");
 const methodOverride = require("method-override");
 const session = require("express-session");
 const flash = require("connect-flash");
+// Mongo injection sanitizer
+const mongoSanitize = require('express-mongo-sanitize');
 
 
 // Initialize express
@@ -41,6 +43,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 // Designate certain files as public so that they can be accessed by the user's computer
 app.use(express.static(path.join(__dirname, "public")));
+
+// Initialize sanitizer
+app.use(mongoSanitize());
 
 
 // Sessions related stuff ----------------------------- MORE DOCUMENTATION NEEDED

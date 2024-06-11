@@ -5,6 +5,10 @@ const map = new mapboxgl.Map({
     zoom: 12
 });
 
+// Add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
+
+
 // Set marker options.
 const marker = new mapboxgl.Marker({
     color: "#FF0000",
