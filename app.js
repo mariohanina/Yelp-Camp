@@ -24,6 +24,8 @@ const session = require("express-session");
 const flash = require("connect-flash");
 // Mongo injection sanitizer
 const mongoSanitize = require('express-mongo-sanitize');
+// Require helmet, it has something to do with seccurity
+const helmet = require("helmet");
 
 
 // Initialize express
@@ -47,14 +49,23 @@ app.use(express.static(path.join(__dirname, "public")));
 // Initialize sanitizer
 app.use(mongoSanitize());
 
+// Use helemt, to add security feature,
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+    })
+);
+
 
 // Sessions related stuff ----------------------------- MORE DOCUMENTATION NEEDED
 const sessionConfig = {
+    name: "HeheBoi",
     secret: "heheboi",
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        // secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
