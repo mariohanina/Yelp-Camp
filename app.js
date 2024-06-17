@@ -26,7 +26,8 @@ const flash = require("connect-flash");
 const mongoSanitize = require('express-mongo-sanitize');
 // Require helmet, it has something to do with seccurity
 const helmet = require("helmet");
-
+// Require the mongo store
+const MongoStore = require('connect-mongo');
 
 // Initialize express
 const app = express();
@@ -50,17 +51,73 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
 // Use helemt, to add security feature,
+// app.use(
+//     helmet({
+//         contentSecurityPolicy: false,
+//     })
+// );
+
+
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://api.mapbox.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+];
+const styleSrcUrls = [
+    "https://cdn.jsdelivr.net",
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    "https://api.mapbox.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+];
+const connectSrcUrls = [
+    "https://api.mapbox.com/",
+    "https://a.tiles.mapbox.com/",
+    "https://b.tiles.mapbox.com/",
+    "https://events.mapbox.com/",
+];
+const fontSrcUrls = [];
 app.use(
-    helmet({
-        contentSecurityPolicy: false,
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                "https://res.cloudinary.com/dvn8e9cgl/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
+                "https://images.unsplash.com/",
+            ],
+            fontSrc: ["'self'", ...fontSrcUrls],
+        },
     })
 );
 
 
+// Database url
+// const dbUrl = process.env.DB_URL;
+const dbUrl = process.env.DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp';
+const secret = process.env.SECRET || "heheboi";
+
 // Sessions related stuff ----------------------------- MORE DOCUMENTATION NEEDED
 const sessionConfig = {
+    store: MongoStore.create({
+        mongoUrl: dbUrl,
+        secret,
+        touchAfter: 24 * 60 * 60 // time period in seconds
+    }),
     name: "HeheBoi",
-    secret: "heheboi",
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -95,8 +152,10 @@ app.use((req, res, next) => {
 
 // Connect to the database
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp');
+    await mongoose.connect(dbUrl);
 }
+
+
 
 main()
     .then(() => console.log("Connection opened!"))
